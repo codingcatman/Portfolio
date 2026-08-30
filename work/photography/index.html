@@ -55,12 +55,14 @@
       padding: 16px;
       border: 1px solid var(--line);
       border-radius: 12px;
-      background-color: #8A8377;
       text-decoration: none;
       color: var(--ink);
       opacity: 0.9;
       transition: opacity 0.25s ease, color 0.25s ease, border-color 0.25s ease,
                   transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    @media (max-width: 640px) {
+      .work-tile { background-color: #8A8377; }
     }
     @media (hover: hover) {
       .work-tile:hover {

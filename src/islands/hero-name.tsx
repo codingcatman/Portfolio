@@ -15,7 +15,7 @@ if (el) {
       />
       <AnimatedText
         text="BANCK"
-        solidColor="#4A4846"
+        solidColor="#F3EEE6"
         outline
         outlineWidth="0.5px"
         animate={false}

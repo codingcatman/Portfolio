@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      function setVH() {
+        document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+      }
+      var lastWidth = window.innerWidth;
+      setVH();
+      window.addEventListener('resize', function () {
+        if (window.innerWidth !== lastWidth) {
+          lastWidth = window.innerWidth;
+          setVH();
+        }
+      });
+    })();
+  </script>
+  <title>Graphic Design</title>
+  <link rel="icon" type="image/png" href="../../assets/favicon.png" />
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="../../assets/site.css?v=5" />
+  <link rel="stylesheet" href="../../assets/fonts.css" />
+  <style>
+    .page-head { padding: clamp(36px, calc(var(--vh, 1vh) * 7), 80px) 0 clamp(20px, calc(var(--vh, 1vh) * 4), 44px); }
+    .page-head .kicker {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .page-head h1 {
+      font-family: "Marcellus", Georgia, "Times New Roman", serif;
+      font-size: clamp(2.4rem, 6.5vw, 4.4rem);
+      font-weight: 100;
+      letter-spacing: -0.01em;
+      margin: 0.3em 0 0;
+    }
+    .empty-note {
+      padding: clamp(34px, calc(var(--vh, 1vh) * 6), 60px) 0 clamp(80px, calc(var(--vh, 1vh) * 14), 140px);
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+    }
+    .graphic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 640px));
+      justify-content: center;
+      gap: clamp(24px, 4vw, 48px);
+      padding: clamp(34px, calc(var(--vh, 1vh) * 6), 60px) 0 clamp(80px, calc(var(--vh, 1vh) * 14), 140px);
+    }
+    .graphic-piece { margin: 0; }
+    .graphic-piece .frame {
+      display: block;
+      width: 100%;
+      background: var(--paper-2);
+      overflow: hidden;
+    }
+    .graphic-piece img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .graphic-piece figcaption {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      letter-spacing: 0.03em;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+    .graphic-piece.ticket-piece .frame {
+      background: transparent;
+      overflow: visible;
+      display: flex;
+      justify-content: center;
+    }
+    /* Give the mount point a definite width instead of shrink-to-fit, so it
+       doesn't just grow to match whatever size the ticket last rendered at
+       (which would make the ResizeObserver in the island measure a box
+       that's already sized to the ticket, and never report anything
+       smaller). */
+    #admit-one-ticket-root {
+      width: 100%;
+      min-width: 0;
+    }
+  </style>
+</head>
+<body>
+  <a href="../../index.html" class="home-btn" aria-label="Home">
+    <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+      <path d="M3,11 L12,4 L21,11" />
+      <path d="M5,10 L5,20 L19,20 L19,10" />
+      <path d="M10,20 L10,14 L14,14 L14,20" />
+    </svg>
+  </a>
+  <div class="wrap">
+    <div class="page-head">
+      <h1 class="sr-only">Graphic Design</h1>
+      <div class="side-nav-col has-dropdown">
+        <p class="home-kicker serif">Selected Work</p>
+        <button type="button" class="side-nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="side-nav-menu">
+          Graphic Design
+          <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M5,9 L12,16 L19,9" /></svg>
+        </button>
+        <nav class="side-nav" id="side-nav-menu" aria-label="Categories">
+          <a href="../product-design/index.html">Product Design</a>
+          <a href="../cad-models/index.html">CAD Models</a>
+          <a href="../projects/index.html">Projects</a>
+          <a href="index.html" class="current" aria-current="page">Graphic Design</a>
+          <a href="../photography/index.html">Photography</a>
+        </nav>
+      </div>
+    </div>
+
+    <hr class="rule" />
+
+    <!-- Add more pieces by dropping images into images/ and copying a
+         <figure>/<img> block below. -->
+    <div class="graphic-grid">
+      <figure class="graphic-piece">
+        <div class="frame">
+          <img src="images/zeedle-poster.jpg" alt="Zeedle information poster, mounted on a wall" loading="lazy" />
+        </div>
+        <figcaption>Zeedle - One-pager</figcaption>
+      </figure>
+
+      <figure class="graphic-piece ticket-piece">
+        <div class="frame">
+          <div id="admit-one-ticket-root"></div>
+        </div>
+        <figcaption>Design for Shooting Stars</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap foot-grid">
+      <span class="meta">Adam Banck &copy; 2026</span>
+    </div>
+  </footer>
+
+  <script type="module" src="../../dist/islands/graphic-design-ticket.js?v=4"></script>
+  <script src="../../assets/js/side-nav-dropdown.js"></script>
+</body>
+</html>

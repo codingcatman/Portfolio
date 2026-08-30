@@ -1,0 +1,637 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      function setVH() {
+        document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+      }
+      var lastWidth = window.innerWidth;
+      setVH();
+      window.addEventListener('resize', function () {
+        if (window.innerWidth !== lastWidth) {
+          lastWidth = window.innerWidth;
+          setVH();
+        }
+      });
+    })();
+  </script>
+  <title>B&amp;O 1 â€” Adam Banck</title>
+  <meta name="description" content="B&amp;O 1 â€” a CAD model. Explore the form in 3D: it auto-rotates and responds to scroll." />
+  <link rel="icon" type="image/png" href="../../../assets/favicon.png" />
+  <link rel="apple-touch-icon" href="../../../assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="../../../assets/site.css?v=5" />
+  <link rel="stylesheet" href="../../../assets/fonts.css" />
+  <style>
+    :root {
+      --measure: 34rem;
+    }
+
+    html {
+      scrollbar-gutter: stable;
+    }
+
+    /* ---------- Hero ---------- */
+
+    .hero {
+      position: relative;
+      min-height: calc(var(--vh, 1vh) * 84);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-divider {
+      flex: 0 0 auto;
+      padding-bottom: clamp(6px, calc(var(--vh, 1vh) * 1.5), 20px);
+    }
+
+    .wordmark {
+      position: relative;
+      z-index: 3;
+      pointer-events: none;
+      margin-top: clamp(6px, calc(var(--vh, 1vh) * 2.5), 26px);
+    }
+
+    .wordmark .kicker-label {
+      display: block;
+      font-family: var(--font-body);   /* same face as the topbar back-link */
+      font-size: clamp(1.1rem, 3.1vw, 1.7rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-left: 0.12em;
+      margin-bottom: 0.22em;
+      color: var(--ink-soft);
+      text-decoration: none;
+      opacity: 0.85;
+      pointer-events: auto;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+
+    .wordmark .title {
+      display: block;
+      font-size: clamp(3.6rem, 16vw, 10rem);
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: -0.01em;
+      margin-top: calc(-0.06em + clamp(10px, calc(var(--vh, 1vh) * 3), 28px));
+    }
+
+    .stage {
+      position: relative;
+      flex: 1 1 auto;
+      min-height: 0;
+      z-index: 1;
+    }
+
+    .stage-inner {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(-3%);
+      width: min(880px, 96vw);
+    }
+
+    .contact-shadow {
+      position: absolute;
+      left: 50%;
+      top: 94%;
+      width: 50%;
+      height: 8%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse at center,
+                  rgba(20, 17, 12, 0.28) 0%,
+                  rgba(20, 17, 12, 0.10) 45%,
+                  transparent 72%);
+      filter: blur(6px);
+      z-index: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    #modelScene {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    #modelCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .stage-fallback {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      color: var(--ink-soft);
+      font-size: 0.85rem;
+    }
+    .stage.no-webgl .stage-fallback { display: flex; }
+    .stage.no-webgl #modelScene { display: none; }
+
+    /* ---------- Concept sections ---------- */
+
+    .sections { padding-top: clamp(4px, calc(var(--vh, 1vh) * 0.8), 12px); padding-bottom: 40px; }
+
+    .lede {
+      max-width: var(--measure);
+      font-size: clamp(1.25rem, 2.6vw, 1.9rem);
+      line-height: 1.45;
+      font-weight: 400;
+      margin: 0 0 clamp(56px, calc(var(--vh, 1vh) * 10), 120px);
+      color: var(--ink);
+    }
+    .lede em { font-style: italic; }
+
+    .rule.thick {
+      border-top-width: 2px;
+      margin-bottom: clamp(4px, calc(var(--vh, 1vh) * 1), 12px);
+    }
+
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px 48px;
+      padding: clamp(34px, calc(var(--vh, 1vh) * 6), 60px) 0;
+    }
+    @media (min-width: 760px) {
+      .section { grid-template-columns: 8rem 1fr; }
+    }
+
+    .section .marker {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      padding-top: 0.5rem;
+    }
+
+    .section h2 {
+      margin: 0 0 0.6em;
+      font-family: var(--font-head);
+      font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+
+    .section p {
+      margin: 0 0 1em;
+      max-width: var(--measure);
+      color: var(--ink-soft);
+      font-size: 1.02rem;
+    }
+    .section p:last-child { margin-bottom: 0; }
+
+    .specs {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-width: var(--measure);
+    }
+    .specs li {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 14px 0;
+      border-top: 1px solid var(--line);
+      font-size: 0.95rem;
+    }
+    .specs li:last-child { border-bottom: 1px solid var(--line); }
+    .specs .k { color: var(--ink-soft); letter-spacing: 0.02em; }
+    .specs .v { text-align: right; }
+
+    .drawing-frame {
+      max-width: var(--measure);
+      aspect-ratio: 1.414 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--paper-2);
+      border: 1px solid var(--line);
+      color: var(--ink-soft);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 24px;
+    }
+    .drawing-embed {
+      width: 100%;
+      max-width: var(--measure);
+      aspect-ratio: 1.414 / 1;
+      border: 1px solid var(--line);
+    }
+    /* Back-link now lives in the wordmark; keep the topbar's remaining
+       product-name label right-aligned like before. */
+    .topbar { justify-content: flex-end; }
+    @media (hover: hover) {
+      .wordmark .kicker-label:hover { opacity: 1; color: var(--accent); }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="../../../index.html" class="home-btn" aria-label="Home">
+    <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+      <path d="M3,11 L12,4 L21,11" />
+      <path d="M5,10 L5,20 L19,20 L19,10" />
+      <path d="M10,20 L10,14 L14,14 L14,20" />
+    </svg>
+  </a>
+
+  <!-- ===================== HERO ===================== -->
+  <header class="hero">
+    <div class="wrap" style="position:relative; z-index:3;">
+      <div class="wordmark serif" aria-label="B&amp;O 1">
+        <a href="../index.html" class="kicker-label">&larr; CAD Models</a>
+        <span class="title">B&amp;O 1</span>
+      </div>
+    </div>
+
+    <!-- 3D stage: a flex-growing band between the wordmark and the divider,
+         with the model centred inside it. -->
+    <div class="stage" id="stage" aria-hidden="false">
+      <div class="stage-inner">
+        <div class="contact-shadow" id="contactShadow"></div>
+        <div id="modelScene">
+          <canvas id="modelCanvas"></canvas>
+        </div>
+      </div>
+      <div class="stage-fallback">
+        <p>This object is best viewed in a browser with WebGL enabled.<br />
+           Interactive 3D model unavailable.</p>
+      </div>
+    </div>
+
+    <div class="wrap hero-divider">
+      <hr class="rule thick" />
+    </div>
+
+  </header>
+
+  <!-- ===================== CONCEPT ===================== -->
+  <main class="wrap sections">
+
+    <!-- NOTE: The copy below is placeholder text. Replace it with the real
+         story of B&O 1 â€” what it is, who it's for, and why it matters. -->
+    <p class="lede">
+      A concept object, modelled part by part â€” every surface, finish, and
+      colour a deliberate choice. <em>B&amp;O 1</em> is a study in how form
+      and material read together.
+    </p>
+
+    <hr class="rule" />
+
+    <section class="section" id="concept">
+      <div class="marker">01 â€” Concept</div>
+      <div>
+        <h2>An idea, distilled</h2>
+        <p>
+          Placeholder copy â€” replace with the real story behind B&amp;O 1:
+          what problem it answers, who it's for, and the thinking that shaped
+          its form.
+        </p>
+      </div>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="section" id="form">
+      <div class="marker">02 â€” Form</div>
+      <div>
+        <h2>Form and finish</h2>
+        <p>
+          Placeholder copy â€” describe the model's geometry and how its
+          materials (satin and polished aluminium, anodized colour, enamel
+          paint, 3D-printed composite) were chosen to work together.
+        </p>
+      </div>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="section" id="craft">
+      <div class="marker">03 â€” Craft</div>
+      <div>
+        <h2>Made to be kept</h2>
+        <p>
+          Placeholder copy â€” describe how the model was built, the CAD
+          workflow, and what close tolerances or assembly details matter here.
+        </p>
+      </div>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="section" id="specs">
+      <div class="marker">04 â€” Specs</div>
+      <div>
+        <h2>At a glance</h2>
+        <ul class="specs">
+          <li><span class="k">Geometry</span><span class="v">Multi-part CAD assembly</span></li>
+          <li><span class="k">Materials</span><span class="v">Aluminium, anodized aluminium, enamel paint, composite</span></li>
+          <li><span class="k">Source</span><span class="v">CAD (OBJ)</span></li>
+          <li><span class="k">Status</span><span class="v">Concept</span></li>
+        </ul>
+        <p style="margin-top:20px; font-size:0.85rem;">
+          Placeholder specifications â€” update with the real figures for B&amp;O 1.
+        </p>
+      </div>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="section" id="drawing">
+      <div class="marker">05 â€” Drawing</div>
+      <div>
+        <h2>Technical drawing</h2>
+        <p>
+          A hidden-line CAD drawing of B&amp;O 1, exported directly from Fusion's
+          Drawing workspace.
+        </p>
+        <!-- Placeholder â€” drop the exported file in this folder and swap this
+             block for one of the two options below.
+
+             Option A (PDF, shown inline via the browser's PDF viewer):
+             <object data="drawing.pdf" type="application/pdf" class="drawing-embed">
+               <p>Your browser can't display the PDF inline.
+                  <a href="drawing.pdf">Open the drawing (PDF)</a>.</p>
+             </object>
+
+             Option B (SVG/PNG export, renders like a normal image):
+             <img class="drawing-embed" src="drawing.svg" alt="B&O 1 â€” hidden-line CAD drawing" /> -->
+        <div class="drawing-frame">Drawing coming soon.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <div class="wrap foot-grid">
+      <span class="meta">Adam Banck &copy; 2026</span>
+    </div>
+  </footer>
+
+  <!-- Vendored Three.js (r128 UMD) + OBJ loader so the model renders with its
+       per-part materials and no network access. -->
+  <script src="../../../vendor/three.min.js"></script>
+  <script src="../../../vendor/OBJLoader.js"></script>
+  <!-- The B&O 1 model (OBJ) embedded as base64 so it loads from file://. -->
+  <script src="models/bo-obj-data.js"></script>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var DEG = Math.PI / 180;
+      var MIN_ZOOM = 0.45;
+      var MAX_ZOOM = 1.6;
+      var BORDER_MARGIN = 0.84;
+      var modelEffRadius = 1;
+
+      var stageEl   = document.getElementById("stage");
+      var sceneEl   = document.getElementById("modelScene");
+      var canvasEl  = document.getElementById("modelCanvas");
+      var shadowEl  = document.getElementById("contactShadow");
+
+      var rotX = 0;   // default tilt (fixed â€” no scroll-driven tilt)
+      var rotY = -28;
+      var zoom = 1.05;
+      var modelBaseScale = 1;
+
+      var autoSpin = true;
+
+      var three = null;
+
+      function hasWebGL() {
+        try {
+          var c = document.createElement("canvas");
+          return !!(window.WebGLRenderingContext &&
+            (c.getContext("webgl") || c.getContext("experimental-webgl")));
+        } catch (e) { return false; }
+      }
+
+      function sceneSize() {
+        return {
+          w: sceneEl.clientWidth || 400,
+          h: sceneEl.clientHeight || 400
+        };
+      }
+
+      function initThree() {
+        if (three) return three;
+        var s = sceneSize();
+
+        var renderer = new THREE.WebGLRenderer({
+          canvas: canvasEl, antialias: true, alpha: true
+        });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.setSize(s.w, s.h, false);
+
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(38, s.w / s.h, 0.1, 100);
+        camera.position.set(0, 0, 5);
+
+        scene.add(new THREE.HemisphereLight(0xd8c9b0, 0x2a2422, 0.45));
+        var key = new THREE.DirectionalLight(0xe8dcc4, 0.6);
+        key.position.set(3, 4, 3);
+        scene.add(key);
+        var rim = new THREE.DirectionalLight(0xd9d0c0, 0.3);
+        rim.position.set(-4, 2, -3);
+        scene.add(rim);
+        var fill = new THREE.DirectionalLight(0xc9a97a, 0.12);
+        fill.position.set(0, -3, 2);
+        scene.add(fill);
+
+        try {
+          var ec = document.createElement("canvas");
+          ec.width = 64; ec.height = 32;
+          var eg = ec.getContext("2d");
+          var grd = eg.createLinearGradient(0, 0, 0, 32);
+          grd.addColorStop(0.0, "#FFFFFF");
+          grd.addColorStop(0.5, "#EEF4ED");
+          grd.addColorStop(1.0, "#CCD5D4");
+          eg.fillStyle = grd; eg.fillRect(0, 0, 64, 32);
+          var etex = new THREE.CanvasTexture(ec);
+          etex.mapping = THREE.EquirectangularReflectionMapping;
+          var pmrem = new THREE.PMREMGenerator(renderer);
+          scene.environment = pmrem.fromEquirectangular(etex).texture;
+          etex.dispose(); pmrem.dispose();
+        } catch (e) { if (window.console) console.error(e); }
+
+        var group = new THREE.Group();
+        scene.add(group);
+
+        three = { renderer: renderer, scene: scene, camera: camera,
+                  group: group, model: null };
+        return three;
+      }
+
+      function applyTransform() {
+        if (!three) return;
+        three.group.rotation.x = rotX * DEG;
+        three.group.rotation.y = rotY * DEG;
+        var sc = modelBaseScale * zoom;
+        three.group.scale.set(sc, sc, sc);
+      }
+
+      function renderThree() {
+        if (three) three.renderer.render(three.scene, three.camera);
+      }
+
+      function resizeThree() {
+        if (!three) return;
+        var s = sceneSize();
+        three.renderer.setSize(s.w, s.h, false);
+        three.camera.aspect = s.w / s.h;
+        three.camera.updateProjectionMatrix();
+        computeZoomLimits();
+        zoom = MAX_ZOOM;   // fixed size â€” no scroll-driven zoom/tilt
+        applyTransform();
+        renderThree();
+      }
+
+      function computeZoomLimits() {
+        if (!three) return;
+        var dist = three.camera.position.length();
+        var halfH = dist * Math.tan((three.camera.fov * DEG) / 2);
+        var halfW = halfH * three.camera.aspect;
+        var fit = Math.min(halfH, halfW);
+        MAX_ZOOM = (fit * BORDER_MARGIN) / modelEffRadius;
+        MIN_ZOOM = MAX_ZOOM * 0.4;
+        zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoom));
+        updateShadow();
+      }
+
+      function loop() {
+        if (autoSpin) { rotY += 0.18; }
+        applyTransform();
+        renderThree();
+        requestAnimationFrame(loop);
+      }
+
+      // Per-part appearance, keyed by the material names in the OBJ/MTL.
+      // Base colours come from bo.mtl (Kd); finishes are chosen to match
+      // the named appearances (satin/polished/anodized aluminium, glossy
+      // enamel paint, matte composite).
+      var OBJ_MATERIALS = {
+        "Aluminum_-_Satin":                { color: 0xf5f5f6, roughness: 0.35, metalness: 0.85 },
+        "Silver_-_Polished":                { color: 0xfbfaf5, roughness: 0.12, metalness: 0.95 },
+        "EPX_150_-_Air_Baked_(with_Carbon_M2_M3_L1_3D_Printers)":
+                                             { color: 0x3f3f3f, roughness: 0.75, metalness: 0.00 },
+        "Paint_-_Enamel_Glossy_(White)":    { color: 0xf6f6f3, roughness: 0.25, metalness: 0.00 },
+        "Paint_-_Enamel_Glossy_(Green)":    { color: 0x449648, roughness: 0.25, metalness: 0.00 },
+        "Paint_-_Enamel_Glossy_(Yellow)":   { color: 0xe8ad23, roughness: 0.25, metalness: 0.00 },
+        "Aluminum_-_Anodized_Rough_(Blue)": { color: 0x5995da, roughness: 0.55, metalness: 0.60 },
+        "Aluminum_-_Anodized_Rough_(Red)":  { color: 0xda5959, roughness: 0.55, metalness: 0.60 }
+      };
+
+      function applyObjMaterials(obj) {
+        obj.traverse(function (child) {
+          if (!child.isMesh) return;
+          var name = (child.material && child.material.name) || "";
+          var spec = OBJ_MATERIALS[name] ||
+                     { color: 0x9a9a9a, roughness: 0.6, metalness: 0.0 };
+          var m = new THREE.MeshStandardMaterial({
+            color: spec.color, roughness: spec.roughness,
+            metalness: spec.metalness, envMapIntensity: 0.52
+          });
+          if (spec.transparent) {
+            m.transparent = true; m.opacity = spec.opacity;
+            m.depthWrite = false; m.side = THREE.DoubleSide;
+          }
+          child.material = m;
+          if (child.geometry && !child.geometry.attributes.normal) {
+            child.geometry.computeVertexNormals();
+          }
+        });
+      }
+
+      function loadOBJ(objText) {
+        var t = initThree();
+        var obj = new THREE.OBJLoader().parse(objText);
+        applyObjMaterials(obj);
+
+        // Orient (CAD Z-up -> Three.js Y-up) and centre on the model's middle.
+        obj.rotation.x = -Math.PI / 2;
+        obj.updateMatrixWorld(true);
+        var box = new THREE.Box3().setFromObject(obj);
+        var center = box.getCenter(new THREE.Vector3());
+        var size = box.getSize(new THREE.Vector3());
+        obj.position.set(-center.x, -center.y, -center.z);
+
+        var radius = 0.5 * size.length() || 1;
+        modelBaseScale = radius > 0 ? (1.35 / radius) : 1;
+
+        var dims = [size.x, size.y, size.z].sort(function (a, b) { return b - a; });
+        modelEffRadius =
+          0.5 * Math.sqrt(dims[0] * dims[0] + dims[1] * dims[1]) * modelBaseScale;
+
+        if (t.model) t.group.remove(t.model);
+        t.model = obj;
+        t.group.add(obj);
+
+        computeZoomLimits();
+        zoom = MAX_ZOOM;
+        resizeThree();
+        applyTransform();
+        renderThree();
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(function () { resizeThree(); });
+        }
+      }
+
+      function loadModel() {
+        if (typeof THREE === "undefined" || !THREE.OBJLoader || !hasWebGL()) {
+          stageEl.classList.add("no-webgl");
+          return;
+        }
+        try {
+          if (typeof window.__BO_OBJ_B64 === "string") {
+            loadOBJ(atob(window.__BO_OBJ_B64));   // OBJ is ASCII text
+            requestAnimationFrame(loop);
+            return;
+          }
+        } catch (err) {
+          if (window.console) console.error(err);
+        }
+        // Fallback: fetch the .obj (works when served over HTTP).
+        fetch("models/bo.obj")
+          .then(function (r) {
+            if (!r.ok) throw new Error("HTTP " + r.status);
+            return r.text();
+          })
+          .then(function (txt) { loadOBJ(txt); requestAnimationFrame(loop); })
+          .catch(function (err) {
+            if (window.console) console.error(err);
+            stageEl.classList.add("no-webgl");
+          });
+      }
+
+      function updateShadow() {
+        if (!shadowEl) return;
+        var s = MAX_ZOOM > 0 ? (zoom / MAX_ZOOM) : 1;
+        shadowEl.style.transform = "translate(-50%, -50%) scale(" + s + ")";
+        shadowEl.style.opacity =
+          String(Math.max(0.25, Math.min(0.6, 0.32 + s * 0.28)));
+      }
+
+      window.addEventListener("resize", resizeThree);
+
+      loadModel();
+    })();
+  </script>
+</body>
+</html>

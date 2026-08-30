@@ -1,0 +1,640 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      function setVH() {
+        document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+      }
+      var lastWidth = window.innerWidth;
+      setVH();
+      window.addEventListener('resize', function () {
+        if (window.innerWidth !== lastWidth) {
+          lastWidth = window.innerWidth;
+          setVH();
+        }
+      });
+    })();
+  </script>
+  <title>HappyLight</title>
+  <meta name="description" content="HappyLight â€” a project by Adam Banck. Explore the form in 3D: it auto-rotates and responds to scroll." />
+  <link rel="icon" type="image/png" href="../../../assets/favicon.png" />
+  <link rel="apple-touch-icon" href="../../../assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="../../../assets/site.css?v=5" />
+  <link rel="stylesheet" href="../../../assets/fonts.css" />
+  <style>
+    :root {
+      --measure: 34rem;
+    }
+
+    html {
+      scrollbar-gutter: stable;
+    }
+
+    /* ---------- Hero ---------- */
+
+    .hero .page-head {
+      padding: clamp(36px, calc(var(--vh, 1vh) * 7), 80px) 0 clamp(20px, calc(var(--vh, 1vh) * 4), 44px);
+    }
+
+    .hero {
+      position: relative;
+      min-height: calc(var(--vh, 1vh) * 84);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-divider {
+      flex: 0 0 auto;
+      padding-bottom: clamp(6px, calc(var(--vh, 1vh) * 1.5), 20px);
+    }
+
+    .wordmark {
+      position: relative;
+      z-index: 3;
+      pointer-events: none;
+      margin-top: clamp(6px, calc(var(--vh, 1vh) * 2.5), 26px);
+    }
+
+    .wordmark .kicker-label {
+      display: block;
+      font-family: var(--font-body);   /* same face as the topbar back-link */
+      font-size: clamp(1.1rem, 3.1vw, 1.7rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-left: 0.12em;
+      margin-bottom: 0.22em;
+      color: var(--ink-soft);
+      text-decoration: none;
+      opacity: 0.85;
+      pointer-events: auto;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+
+    .wordmark .title {
+      display: block;
+      font-size: clamp(2.6rem, 11vw, 7rem);
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: -0.01em;
+      margin-top: calc(-0.06em + clamp(10px, calc(var(--vh, 1vh) * 3), 28px));
+    }
+
+    .stage {
+      position: relative;
+      flex: 1 1 auto;
+      min-height: 0;
+      z-index: 1;
+    }
+
+    .stage-inner {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(-3%);
+      width: min(600px, 96vw);
+    }
+
+    .contact-shadow {
+      position: absolute;
+      left: 50%;
+      top: 94%;
+      width: 50%;
+      height: 8%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse at center,
+                  rgba(20, 17, 12, 0.28) 0%,
+                  rgba(20, 17, 12, 0.10) 45%,
+                  transparent 72%);
+      filter: blur(6px);
+      z-index: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    #modelScene {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    #modelCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .stage-fallback {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      color: var(--ink-soft);
+      font-size: 0.85rem;
+    }
+    .stage.no-webgl .stage-fallback { display: flex; }
+    .stage.no-webgl #modelScene { display: none; }
+
+    /* ---------- Concept sections ---------- */
+
+    .sections { padding-top: clamp(4px, calc(var(--vh, 1vh) * 0.8), 12px); padding-bottom: 40px; }
+
+    .lede {
+      max-width: var(--measure);
+      font-size: clamp(1.25rem, 2.6vw, 1.9rem);
+      line-height: 1.45;
+      font-weight: 400;
+      margin: 0 0 clamp(56px, calc(var(--vh, 1vh) * 10), 120px);
+      color: var(--ink);
+    }
+    .lede em { font-style: italic; }
+
+    .rule.thick {
+      border-top-width: 2px;
+      margin-bottom: clamp(4px, calc(var(--vh, 1vh) * 1), 12px);
+    }
+
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px 48px;
+      padding: clamp(34px, calc(var(--vh, 1vh) * 6), 60px) 0;
+    }
+    @media (min-width: 760px) {
+      .section { grid-template-columns: 8rem 1fr; }
+    }
+
+    .section .marker {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      padding-top: 0.5rem;
+    }
+
+    .section h2 {
+      margin: 0 0 0.6em;
+      font-family: var(--font-head);
+      font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+
+    .section p {
+      margin: 0 0 1em;
+      max-width: var(--measure);
+      color: var(--ink-soft);
+      font-size: 1.02rem;
+    }
+    .section p:last-child { margin-bottom: 0; }
+
+    .image-features {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(40px, calc(var(--vh, 1vh) * 7), 80px);
+      max-width: 100%;
+    }
+    .image-feature {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: clamp(20px, 4vw, 48px);
+    }
+    .image-feature:nth-child(even) { flex-direction: row-reverse; }
+    .image-feature img {
+      flex: 1 1 320px;
+      max-width: 420px;
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--line);
+    }
+    .image-feature .caption {
+      flex: 1 1 220px;
+      max-width: var(--measure);
+      color: var(--ink-soft);
+      font-size: 1.02rem;
+      line-height: 1.6;
+    }
+    /* Back-link now lives in the wordmark; keep the topbar's remaining
+       product-name label right-aligned like before. */
+    .topbar { justify-content: flex-end; }
+    @media (hover: hover) {
+      .wordmark .kicker-label:hover { opacity: 1; color: var(--accent); }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="../../../index.html" class="home-btn" aria-label="Home">
+    <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+      <path d="M3,11 L12,4 L21,11" />
+      <path d="M5,10 L5,20 L19,20 L19,10" />
+      <path d="M10,20 L10,14 L14,14 L14,20" />
+    </svg>
+  </a>
+
+  <!-- ===================== HERO ===================== -->
+  <header class="hero">
+    <div class="wrap" style="position:relative; z-index:3;">
+      <div class="page-head">
+        <div class="side-nav-col has-dropdown">
+          <p class="home-kicker serif">Selected Work</p>
+          <button type="button" class="side-nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="side-nav-menu">
+            Projects
+            <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M5,9 L12,16 L19,9" /></svg>
+          </button>
+          <nav class="side-nav" id="side-nav-menu" aria-label="Categories">
+            <a href="../../product-design/index.html">Product Design</a>
+            <a href="../../cad-models/index.html">CAD Models</a>
+            <a href="../index.html" class="current" aria-current="page">Projects</a>
+            <a href="../../photography/index.html">Photography</a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="wordmark serif" aria-label="HappyLight">
+        <a href="../index.html" class="kicker-label">&larr; Projects</a>
+        <span class="title">HappyLight</span>
+      </div>
+    </div>
+
+    <!-- 3D stage: a flex-growing band between the wordmark and the divider,
+         with the model centred inside it. -->
+    <div class="stage" id="stage" aria-hidden="false">
+      <div class="stage-inner">
+        <div class="contact-shadow" id="contactShadow"></div>
+        <div id="modelScene">
+          <canvas id="modelCanvas"></canvas>
+        </div>
+      </div>
+      <div class="stage-fallback">
+        <p>This object is best viewed in a browser with WebGL enabled.<br />
+           Interactive 3D model unavailable.</p>
+      </div>
+    </div>
+
+    <div class="wrap hero-divider">
+      <hr class="rule thick" />
+    </div>
+
+  </header>
+
+  <!-- ===================== CONCEPT ===================== -->
+  <main class="wrap sections">
+
+    <p class="lede">
+      <em>HappyLight</em> is an off-grid, modular street lamp designed for
+      festival campsites - developed for Roskilde Festival and equipment
+      supplier Godik ApS as part of DTU course 41639, Holistic Design of
+      Engineering Systems. A smile-shaped cutout casts soft, downward light
+      while colour-coded LEDs help festivalgoers find their way home after
+      dark.
+    </p>
+
+    <hr class="rule" />
+
+    <section class="section" id="description">
+      <div class="marker"></div>
+      <div>
+        <h2>Description</h2>
+        <p>
+          Festival campsites go dark fast, and dark makes people feel lost
+          and unsafe - especially at Roskilde Festival, where the ground
+          can't be dug up for permanent wiring. HappyLight answers that with
+          a battery-powered, three-part lamp - head, body, and foot - that
+          assembles without tools and anchors into the ground with a
+          standard earth drill. Its body is built from repurposed zinc alloy
+          drainage pipes, milled with a smiling cutout that both diffuses
+          the light downward and gives the lamp its character. A warm,
+          3000K LED lights the ground beneath it; an RGB strip in the head
+          glows in colour-coded zones so festivalgoers can navigate the
+          campsite by colour, even in the dark. At roughly 65 cm tall and
+          10 cm across, it's sized to be visible without being a target - a
+          deliberately unremarkable object that discourages theft and
+          vandalism just by not standing out. I worked on this as the
+          team's CAD designer, developing the physical form from early
+          sketches through to the modular Head/Body/Foot assembly shown
+          below.
+        </p>
+        <div class="image-features">
+          <div class="image-feature">
+            <img src="photo-1.jpg" alt="Stakeholder mapping diagram for the HappyLight project" />
+            <p class="caption">
+              Stakeholder mapping - tracing how Roskilde Festival, Godik,
+              volunteers, and local authorities connect to the project, used
+              to understand who the lamp needed to work for beyond just
+              festivalgoers.
+            </p>
+          </div>
+          <div class="image-feature">
+            <img src="photo-2.jpg" alt="Affinity diagram sorting interview findings into themed clusters" />
+            <p class="caption">
+              Affinity diagramming - sorting findings from interviews with
+              Roskilde Festival, Godik, and three other festivals into
+              recurring themes, including the need for off-grid power, warm
+              cozy light, and theft protection.
+            </p>
+          </div>
+          <div class="image-feature">
+            <img src="photo-3.jpg" alt="Competitor analysis of existing festival lighting solutions" />
+            <p class="caption">
+              Competitor analysis - existing lighting solutions on the
+              market, from construction-site floodlights to string lights,
+              none of which combined off-grid power, wayfinding, and
+              festival atmosphere the way the brief called for.
+            </p>
+          </div>
+          <div class="image-feature">
+            <img src="photo-4.jpg" alt="Early hand-drawn concept sketches for the lamp" />
+            <p class="caption">
+              Early concept sketches, including the first version of the
+              smile-shaped light cutout that would carry through to the
+              final design.
+            </p>
+          </div>
+          <div class="image-feature">
+            <img src="photo-5.jpg" alt="Finished prototype installed outdoors next to CAD renders of its Head, Body, and Foot modules" />
+            <p class="caption">
+              The finished prototype installed outdoors, alongside CAD
+              renders showing its three modular parts: Head, Body, and Foot.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <div class="wrap foot-grid">
+      <span class="meta">Adam Banck &copy; 2026</span>
+    </div>
+  </footer>
+
+  <!-- Vendored Three.js (r128 UMD) + OBJ loader so the model renders with its
+       per-part materials and no network access. -->
+  <script src="../../../vendor/three.min.js"></script>
+  <script src="../../../vendor/OBJLoader.js"></script>
+  <!-- The HappyLight model (OBJ) embedded as base64 so it loads from
+       file://. -->
+  <script src="models/roskilde-lamp-obj-data.js"></script>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var DEG = Math.PI / 180;
+      var MIN_ZOOM = 0.45;
+      var MAX_ZOOM = 1.6;
+      var BORDER_MARGIN = 0.84;
+      var modelEffRadius = 1;
+
+      var stageEl   = document.getElementById("stage");
+      var sceneEl   = document.getElementById("modelScene");
+      var canvasEl  = document.getElementById("modelCanvas");
+      var shadowEl  = document.getElementById("contactShadow");
+
+      var rotX = 0;   // default tilt (fixed â€” no scroll-driven tilt)
+      var rotY = -28;
+      var zoom = 1.05;
+      var modelBaseScale = 1;
+
+      var autoSpin = true;   // ambient rotation continues regardless of scroll
+
+      var three = null;
+
+      function hasWebGL() {
+        try {
+          var c = document.createElement("canvas");
+          return !!(window.WebGLRenderingContext &&
+            (c.getContext("webgl") || c.getContext("experimental-webgl")));
+        } catch (e) { return false; }
+      }
+
+      function sceneSize() {
+        return {
+          w: sceneEl.clientWidth || 400,
+          h: sceneEl.clientHeight || 400
+        };
+      }
+
+      function initThree() {
+        if (three) return three;
+        var s = sceneSize();
+
+        var renderer = new THREE.WebGLRenderer({
+          canvas: canvasEl, antialias: true, alpha: true
+        });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.setSize(s.w, s.h, false);
+
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(38, s.w / s.h, 0.1, 100);
+        camera.position.set(0, 0, 5);
+
+        scene.add(new THREE.HemisphereLight(0xd8c9b0, 0x2a2422, 0.45));
+        var key = new THREE.DirectionalLight(0xe8dcc4, 0.6);
+        key.position.set(3, 4, 3);
+        scene.add(key);
+        var rim = new THREE.DirectionalLight(0xd9d0c0, 0.3);
+        rim.position.set(-4, 2, -3);
+        scene.add(rim);
+        var fill = new THREE.DirectionalLight(0xc9a97a, 0.12);
+        fill.position.set(0, -3, 2);
+        scene.add(fill);
+
+        try {
+          var ec = document.createElement("canvas");
+          ec.width = 64; ec.height = 32;
+          var eg = ec.getContext("2d");
+          var grd = eg.createLinearGradient(0, 0, 0, 32);
+          grd.addColorStop(0.0, "#ffffff");
+          grd.addColorStop(0.5, "#e4e6e8");
+          grd.addColorStop(1.0, "#9a9ea3");
+          eg.fillStyle = grd; eg.fillRect(0, 0, 64, 32);
+          var etex = new THREE.CanvasTexture(ec);
+          etex.mapping = THREE.EquirectangularReflectionMapping;
+          var pmrem = new THREE.PMREMGenerator(renderer);
+          scene.environment = pmrem.fromEquirectangular(etex).texture;
+          etex.dispose(); pmrem.dispose();
+        } catch (e) { if (window.console) console.error(e); }
+
+        var group = new THREE.Group();
+        scene.add(group);
+
+        three = { renderer: renderer, scene: scene, camera: camera,
+                  group: group, model: null };
+        return three;
+      }
+
+      function applyTransform() {
+        if (!three) return;
+        three.group.rotation.x = rotX * DEG;
+        three.group.rotation.y = rotY * DEG;
+        var sc = modelBaseScale * zoom;
+        three.group.scale.set(sc, sc, sc);
+      }
+
+      function renderThree() {
+        if (three) three.renderer.render(three.scene, three.camera);
+      }
+
+      function resizeThree() {
+        if (!three) return;
+        var s = sceneSize();
+        three.renderer.setSize(s.w, s.h, false);
+        three.camera.aspect = s.w / s.h;
+        three.camera.updateProjectionMatrix();
+        computeZoomLimits();
+        zoom = MAX_ZOOM;   // fixed size â€” no scroll-driven zoom/tilt
+        applyTransform();
+        renderThree();
+      }
+
+      function computeZoomLimits() {
+        if (!three) return;
+        var dist = three.camera.position.length();
+        var halfH = dist * Math.tan((three.camera.fov * DEG) / 2);
+        var halfW = halfH * three.camera.aspect;
+        var fit = Math.min(halfH, halfW);
+        MAX_ZOOM = (fit * BORDER_MARGIN) / modelEffRadius;
+        MIN_ZOOM = MAX_ZOOM * 0.4;
+        zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoom));
+        updateShadow();
+      }
+
+      function loop() {
+        if (autoSpin) { rotY += 0.18; }
+        applyTransform();
+        renderThree();
+        requestAnimationFrame(loop);
+      }
+
+      // Per-part appearance, keyed by the material names in the OBJ/MTL.
+      // Base colours come from roskilde-lamp.mtl (Kd); finishes are chosen
+      // to match the named appearances. Steel_-_Galvanized_(Small) exported
+      // with Kd 0,0,0 (a bad/placeholder colour from the CAD export), so its
+      // finish here matches the satin stainless steel used for the calliper
+      // model (work/cad-models/index.html's OBJ_MATERIALS_CALLIPER) instead.
+      var OBJ_MATERIALS = {
+        "Aluminum_-_Anodized_Rough_(Blue)":        { color: 0x5995da, roughness: 0.55, metalness: 0.60 },
+        "Plastic_-_Matte_(Gray)":                  { color: 0xb3b3b3, roughness: 0.55, metalness: 0.00 },
+        "Tough_2000_(with_Formlabs_SLA_3D_Printers)": { color: 0x3f3f3f, roughness: 0.55, metalness: 0.00 },
+        "Plastic_-_Translucent_Matte_(White)":     { color: 0xf6f6f3, roughness: 0.4, metalness: 0.00,
+                                                      transparent: true, opacity: 0.6 },
+        "Steel_-_Galvanized_(Small)":              { color: 0xcbcbcb, roughness: 0.38, metalness: 0.88 }
+      };
+
+      function applyObjMaterials(obj) {
+        obj.traverse(function (child) {
+          if (!child.isMesh) return;
+          var name = (child.material && child.material.name) || "";
+          var spec = OBJ_MATERIALS[name] ||
+                     { color: 0x9a9a9a, roughness: 0.6, metalness: 0.0 };
+          var m = new THREE.MeshStandardMaterial({
+            color: spec.color, roughness: spec.roughness,
+            metalness: spec.metalness, envMapIntensity: 0.65
+          });
+          if (spec.transparent) {
+            m.transparent = true; m.opacity = spec.opacity;
+            m.depthWrite = false; m.side = THREE.DoubleSide;
+          }
+          child.material = m;
+          if (child.geometry && !child.geometry.attributes.normal) {
+            child.geometry.computeVertexNormals();
+          }
+        });
+      }
+
+      function loadOBJ(objText) {
+        var t = initThree();
+        var obj = new THREE.OBJLoader().parse(objText);
+        applyObjMaterials(obj);
+
+        // This export is already Y-up (unlike the site's other CAD exports,
+        // which are Z-up and need a -90Â° X correction) â€” its Y-axis extent
+        // is ~660 units vs ~194 on X/Z, confirming Y is "up" here. No
+        // reorientation needed, just centre on the model's middle.
+        obj.updateMatrixWorld(true);
+        var box = new THREE.Box3().setFromObject(obj);
+        var center = box.getCenter(new THREE.Vector3());
+        var size = box.getSize(new THREE.Vector3());
+        obj.position.set(-center.x, -center.y, -center.z);
+
+        var radius = 0.5 * size.length() || 1;
+        modelBaseScale = radius > 0 ? (1.35 / radius) : 1;
+
+        var dims = [size.x, size.y, size.z].sort(function (a, b) { return b - a; });
+        modelEffRadius =
+          0.5 * Math.sqrt(dims[0] * dims[0] + dims[1] * dims[1]) * modelBaseScale;
+
+        if (t.model) t.group.remove(t.model);
+        t.model = obj;
+        t.group.add(obj);
+
+        computeZoomLimits();
+        zoom = MAX_ZOOM;
+        resizeThree();
+        applyTransform();
+        renderThree();
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(function () { resizeThree(); });
+        }
+      }
+
+      function loadModel() {
+        if (typeof THREE === "undefined" || !THREE.OBJLoader || !hasWebGL()) {
+          stageEl.classList.add("no-webgl");
+          return;
+        }
+        try {
+          if (typeof window.__ROSKILDELAMP_OBJ_B64 === "string") {
+            loadOBJ(atob(window.__ROSKILDELAMP_OBJ_B64));   // OBJ is ASCII text
+            requestAnimationFrame(loop);
+            return;
+          }
+        } catch (err) {
+          if (window.console) console.error(err);
+        }
+        // Fallback: fetch the .obj (works when served over HTTP).
+        fetch("models/roskilde-lamp.obj")
+          .then(function (r) {
+            if (!r.ok) throw new Error("HTTP " + r.status);
+            return r.text();
+          })
+          .then(function (txt) { loadOBJ(txt); requestAnimationFrame(loop); })
+          .catch(function (err) {
+            if (window.console) console.error(err);
+            stageEl.classList.add("no-webgl");
+          });
+      }
+
+      function updateShadow() {
+        if (!shadowEl) return;
+        var s = MAX_ZOOM > 0 ? (zoom / MAX_ZOOM) : 1;
+        shadowEl.style.transform = "translate(-50%, -50%) scale(" + s + ")";
+        shadowEl.style.opacity =
+          String(Math.max(0.25, Math.min(0.6, 0.32 + s * 0.28)));
+      }
+
+      window.addEventListener("resize", resizeThree);
+
+      loadModel();
+    })();
+  </script>
+  <script src="../../../assets/js/side-nav-dropdown.js"></script>
+</body>
+</html>

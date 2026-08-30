@@ -1,0 +1,317 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      function setVH() {
+        document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+      }
+      var lastWidth = window.innerWidth;
+      setVH();
+      window.addEventListener('resize', function () {
+        if (window.innerWidth !== lastWidth) {
+          lastWidth = window.innerWidth;
+          setVH();
+        }
+      });
+    })();
+  </script>
+  <title>Magic Mirror</title>
+  <meta name="description" content="Magic Mirror â€” an intelligent mirror that reflects your inner self rather than your outer appearance, reading your facial expression in real time." />
+  <link rel="icon" type="image/png" href="../../../assets/favicon.png" />
+  <link rel="apple-touch-icon" href="../../../assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="../../../assets/site.css?v=5" />
+  <link rel="stylesheet" href="../../../assets/fonts.css" />
+  <style>
+    :root { --measure: 34rem; }
+
+    .page-head { padding: clamp(36px, calc(var(--vh, 1vh) * 7), 80px) 0 clamp(20px, calc(var(--vh, 1vh) * 4), 44px); }
+
+    .hero { padding: 0 0 clamp(0px, calc(var(--vh, 1vh) * 0.5), 8px); }
+
+    .wordmark { margin-top: clamp(6px, calc(var(--vh, 1vh) * 2.5), 26px); }
+    .wordmark .kicker-label {
+      display: block;
+      font-family: var(--font-body);   /* same face as the topbar back-link */
+      font-size: clamp(1.1rem, 3.1vw, 1.7rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-left: 0.12em;
+      margin-bottom: 0.2em;
+      color: var(--ink-soft);
+      text-decoration: none;
+      opacity: 0.85;
+      pointer-events: auto;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+    .wordmark .title {
+      display: block;
+      font-size: clamp(2.8rem, 11vw, 6.5rem);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      margin-top: clamp(10px, calc(var(--vh, 1vh) * 3), 28px);
+    }
+
+    .hero-image {
+      display: block;
+      max-width: 420px;
+      width: 80%;
+      height: auto;
+      margin: clamp(24px, calc(var(--vh, 1vh) * 5), 48px) auto 0;
+    }
+
+    .sections { padding-top: clamp(4px, calc(var(--vh, 1vh) * 0.8), 12px); padding-bottom: 40px; }
+
+    .lede {
+      max-width: var(--measure);
+      font-size: clamp(1.25rem, 2.6vw, 1.9rem);
+      line-height: 1.45;
+      font-weight: 400;
+      margin: clamp(24px, calc(var(--vh, 1vh) * 4), 44px) 0 clamp(56px, calc(var(--vh, 1vh) * 10), 120px);
+      color: var(--ink);
+    }
+    .lede em { font-style: italic; }
+
+    .rule.thick {
+      border-top-width: 2px;
+      margin-bottom: clamp(4px, calc(var(--vh, 1vh) * 1), 12px);
+    }
+
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px 48px;
+      padding: clamp(34px, calc(var(--vh, 1vh) * 6), 60px) 0;
+    }
+    @media (min-width: 760px) {
+      .section { grid-template-columns: 8rem 1fr; }
+    }
+
+    .section .marker {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      padding-top: 0.5rem;
+    }
+
+    .section h2 {
+      margin: 0 0 0.6em;
+      font-family: var(--font-head);
+      font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+
+    .section p {
+      margin: 0 0 1em;
+      max-width: var(--measure);
+      color: var(--ink-soft);
+      font-size: 1.02rem;
+    }
+    .section p:last-child { margin-bottom: 0; }
+
+    .image-features {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(40px, calc(var(--vh, 1vh) * 7), 80px);
+      max-width: 100%;
+    }
+    .image-feature {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: clamp(20px, 4vw, 48px);
+    }
+    .image-feature:nth-child(even) { flex-direction: row-reverse; }
+    .image-feature img {
+      flex: 1 1 320px;
+      max-width: 420px;
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--line);
+    }
+    .image-feature .caption {
+      flex: 1 1 220px;
+      max-width: var(--measure);
+      color: var(--ink-soft);
+      font-size: 1.02rem;
+      line-height: 1.6;
+    }
+
+    .mirror-canvas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      max-width: 640px;
+      width: 95%;
+      aspect-ratio: 1 / 1.05;
+      margin: clamp(0px, calc(var(--vh, 1vh) * 0.5), 16px) auto 0;
+    }
+    .mirror-canvas canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      flex-shrink: 0;
+    }
+    /* Back-link now lives in the wordmark; keep the topbar's remaining
+       product-name label right-aligned like before. */
+    .topbar { justify-content: flex-end; }
+    @media (hover: hover) {
+      .wordmark .kicker-label:hover { opacity: 1; color: var(--accent); }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="../../../index.html" class="home-btn" aria-label="Home">
+    <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+      <path d="M3,11 L12,4 L21,11" />
+      <path d="M5,10 L5,20 L19,20 L19,10" />
+      <path d="M10,20 L10,14 L14,14 L14,20" />
+    </svg>
+  </a>
+
+  <div class="wrap">
+    <div class="page-head">
+      <div class="side-nav-col has-dropdown">
+        <p class="home-kicker serif">Selected Work</p>
+        <button type="button" class="side-nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="side-nav-menu">
+          Projects
+          <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M5,9 L12,16 L19,9" /></svg>
+        </button>
+        <nav class="side-nav" id="side-nav-menu" aria-label="Categories">
+          <a href="../../product-design/index.html">Product Design</a>
+          <a href="../../cad-models/index.html">CAD Models</a>
+          <a href="../index.html" class="current" aria-current="page">Projects</a>
+          <a href="../../photography/index.html">Photography</a>
+        </nav>
+      </div>
+    </div>
+
+    <header class="hero">
+      <div class="wordmark serif" aria-label="Magic Mirror">
+        <a href="../index.html" class="kicker-label">&larr; Projects</a>
+        <span class="title">Magic Mirror</span>
+      </div>
+      <div id="mirror-canvas" class="mirror-canvas"></div>
+    </header>
+
+    <hr class="rule thick" />
+
+    <!-- ===================== CONCEPT ===================== -->
+    <main class="sections">
+
+      <p class="lede">
+        <em>Magic Mirror</em> is an intelligent mirror that reflects your
+        inner self rather than your outer appearance. It reads your facial
+        expression and tells you what emotions you're conveying to those
+        around you - a bachelor's project in reflective design and
+        human-computer interaction, built with O. Overmark and V.
+        Obel at the IT University of Copenhagen.
+      </p>
+
+      <hr class="rule" />
+
+      <section class="section" id="description">
+        <div class="marker"></div>
+        <div>
+          <h2>Description</h2>
+          <p>
+            Most of us have no idea what our face is doing. Magic Mirror is
+            a mirror that shows you that - not your literal reflection, but
+            a real-time reading of the emotion your expression is projecting
+            to the people around you. It borrows an old idea: the "magic
+            mirror" that reveals an inner truth rather than an outer image,
+            the same trope behind the mirror in Snow White. Ours does it for
+            real, using a hidden camera built into a wooden frame to read
+            your face.
+          </p>
+          <p>
+            Inside, a webcam feeds a facial-recognition model (ml5.js's
+            face-api, running on the creative-coding library p5.js) that
+            scores your expression across seven categories - neutral, happy,
+            angry, sad, disgusted, surprised, fearful - each as a
+            percentage. Rather than showing that data directly, the mirror
+            translates it into two abstract, morphing 3D spheres, redrawn in
+            real time as your expression shifts, alongside a layer of
+            ambient sound (built with howler.js) that fades between happy,
+            sad, and neutral tones as one crosses a confidence threshold.
+            The effect sits deliberately at a remove from your actual face -
+            you see a shape and hear a tone, and have to work out what they
+            reveal about you.
+          </p>
+          <p>
+            The project was developed as a piece of reflective design,
+            exploring emotional intelligence and non-verbal communication:
+            the goal isn't to tell you your mood, but to make you aware of
+            what you're visibly broadcasting to others, whether or not it
+            matches how you actually feel inside. I was responsible for
+            concept development, the coding described above, and building
+            the physical prototype, as our bachelor's project (May 2024).
+          </p>
+          <div class="image-features">
+            <div class="image-feature">
+              <img src="hardware-software.png" alt="Collage of the mirror's hardware and software components" />
+              <p class="caption">
+                The mirror's core hardware and software: a hidden webcam and
+                speaker built into a wooden frame, a p5.js sketch rendering
+                the emotion visualization, and the JavaScript backend
+                running the facial recognition.
+              </p>
+            </div>
+            <div class="image-feature">
+              <img src="landmarks.png" alt="Facial landmark detection and emotion percentage breakdown from face-api" />
+              <p class="caption">
+                face-api plots 68 facial landmarks and scores the detected
+                expression across seven emotions in real time - the data
+                that drives everything the mirror shows and plays.
+              </p>
+            </div>
+            <div class="image-feature">
+              <img src="prototype-angle.jpeg" alt="The Magic Mirror prototype in use, viewed at an angle" />
+              <p class="caption">
+                The finished prototype in use - the hidden camera sits in
+                the small hole at the top of the frame.
+              </p>
+            </div>
+            <div class="image-feature">
+              <img src="prototype-front.jpeg" alt="The Magic Mirror prototype head-on, showing the sphere visualization on screen" />
+              <p class="caption">
+                An earlier version placed two-way glass in front of the
+                screen, so you'd see your own reflection layered over the
+                sphere. User testing found people couldn't focus on both at
+                once - one tester said the glass made it "feel like I'm
+                controlling it" rather than something that represented her,
+                and felt more connected to the mirror once the glass was
+                gone. We removed it for the final prototype shown here. The
+                sphere itself stays tightly formed and largely undistorted
+                whenever the detected expression is close to neutral - the
+                state captured in this shot.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer>
+    <div class="wrap foot-grid">
+      <span class="meta">Adam Banck &copy; 2026</span>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.2/p5.min.js"></script>
+  <script src="sketch.js"></script>
+  <script src="../../../assets/js/side-nav-dropdown.js"></script>
+</body>
+</html>

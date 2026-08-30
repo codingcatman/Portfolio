@@ -1,0 +1,336 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      function setVH() {
+        document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+      }
+      var lastWidth = window.innerWidth;
+      setVH();
+      window.addEventListener('resize', function () {
+        if (window.innerWidth !== lastWidth) {
+          lastWidth = window.innerWidth;
+          setVH();
+        }
+      });
+    })();
+  </script>
+  <title>LiftMaster 1500</title>
+  <meta name="description" content="LiftMaster 1500 â€” a compact, portable personal lift designed for tradespeople renovating older buildings." />
+  <link rel="icon" type="image/png" href="../../../assets/favicon.png" />
+  <link rel="apple-touch-icon" href="../../../assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="../../../assets/site.css?v=5" />
+  <link rel="stylesheet" href="../../../assets/fonts.css" />
+  <style>
+    :root { --measure: 34rem; }
+
+    .page-head { padding: clamp(36px, calc(var(--vh, 1vh) * 7), 80px) 0 clamp(20px, calc(var(--vh, 1vh) * 4), 44px); }
+
+    .hero { padding: 0 0 clamp(20px, calc(var(--vh, 1vh) * 4), 44px); }
+
+    .wordmark { margin-top: clamp(6px, calc(var(--vh, 1vh) * 2.5), 26px); }
+    .wordmark .kicker-label {
+      display: block;
+      font-family: var(--font-body);   /* same face as the topbar back-link */
+      font-size: clamp(1.1rem, 3.1vw, 1.7rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-left: 0.12em;
+      margin-bottom: 0.2em;
+      color: var(--ink-soft);
+      text-decoration: none;
+      opacity: 0.85;
+      pointer-events: auto;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+    .wordmark .title {
+      display: block;
+      font-size: clamp(2.8rem, 11vw, 6.5rem);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      margin-top: clamp(10px, calc(var(--vh, 1vh) * 3), 28px);
+    }
+
+    .hero-stage {
+      position: relative;
+      max-width: 520px;
+      width: 92%;
+      margin: clamp(24px, calc(var(--vh, 1vh) * 5), 48px) auto 0;
+    }
+    .hero-stage .contact-shadow {
+      position: absolute;
+      left: 44%;
+      top: 87%;
+      width: 80%;
+      height: 0%;
+      transform: translate(-45%, 40%);
+      background: radial-gradient(ellipse at center,
+                  rgba(20, 17, 12, 0.28) 0%,
+                  rgba(20, 17, 12, 0.10) 45%,
+                  transparent 72%);
+      filter: blur(6px);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .hero-image {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .sections { padding-top: clamp(4px, calc(var(--vh, 1vh) * 0.8), 12px); padding-bottom: 40px; }
+
+    .lede {
+      max-width: var(--measure);
+      font-size: clamp(1.25rem, 2.6vw, 1.9rem);
+      line-height: 1.45;
+      font-weight: 400;
+      margin: clamp(24px, calc(var(--vh, 1vh) * 4), 44px) 0 clamp(56px, calc(var(--vh, 1vh) * 10), 120px);
+      color: var(--ink);
+    }
+    .lede em { font-style: italic; }
+
+    .rule.thick {
+      border-top-width: 2px;
+      margin-bottom: clamp(4px, calc(var(--vh, 1vh) * 1), 12px);
+    }
+
+    .section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px 48px;
+      padding: clamp(34px, calc(var(--vh, 1vh) * 6), 60px) 0;
+    }
+    @media (min-width: 760px) {
+      .section { grid-template-columns: 8rem 1fr; }
+    }
+
+    .section .marker {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      padding-top: 0.5rem;
+    }
+
+    .section h2 {
+      margin: 0 0 0.6em;
+      font-family: var(--font-head);
+      font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+
+    .section p {
+      margin: 0 0 1em;
+      max-width: var(--measure);
+      color: var(--ink-soft);
+      font-size: 1.02rem;
+    }
+    .section p:last-child { margin-bottom: 0; }
+
+    .image-features {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(40px, calc(var(--vh, 1vh) * 7), 80px);
+      max-width: 100%;
+    }
+    .image-feature {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: clamp(20px, 4vw, 48px);
+    }
+    .image-feature:nth-child(even) { flex-direction: row-reverse; }
+    .image-feature img {
+      flex: 1 1 320px;
+      max-width: 420px;
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--line);
+    }
+    .image-feature .caption {
+      flex: 1 1 220px;
+      max-width: var(--measure);
+      color: var(--ink-soft);
+      font-size: 1.02rem;
+      line-height: 1.6;
+    }
+    /* Back-link now lives in the wordmark; keep the topbar's remaining
+       product-name label right-aligned like before. */
+    .topbar { justify-content: flex-end; }
+    @media (hover: hover) {
+      .wordmark .kicker-label:hover { opacity: 1; color: var(--accent); }
+    }
+
+  </style>
+</head>
+<body>
+
+  <a href="../../../index.html" class="home-btn" aria-label="Home">
+    <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+      <path d="M3,11 L12,4 L21,11" />
+      <path d="M5,10 L5,20 L19,20 L19,10" />
+      <path d="M10,20 L10,14 L14,14 L14,20" />
+    </svg>
+  </a>
+
+  <div class="wrap">
+    <div class="page-head">
+      <div class="side-nav-col has-dropdown">
+        <p class="home-kicker serif">Selected Work</p>
+        <button type="button" class="side-nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="side-nav-menu">
+          Projects
+          <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M5,9 L12,16 L19,9" /></svg>
+        </button>
+        <nav class="side-nav" id="side-nav-menu" aria-label="Categories">
+          <a href="../../product-design/index.html">Product Design</a>
+          <a href="../../cad-models/index.html">CAD Models</a>
+          <a href="../index.html" class="current" aria-current="page">Projects</a>
+          <a href="../../photography/index.html">Photography</a>
+        </nav>
+      </div>
+    </div>
+
+    <header class="hero">
+      <div class="wordmark serif" aria-label="LiftMaster 1500">
+        <a href="../index.html" class="kicker-label">&larr; Projects</a>
+        <span class="title">LiftMaster 1500</span>
+      </div>
+      <div class="hero-stage">
+        <div class="contact-shadow"></div>
+        <img class="hero-image" src="newhero.png" alt="CAD render of the LiftMaster 1500 personal lift in its lowered position, showing the platform, corner posts, safety railing, and motor" />
+      </div>
+    </header>
+
+    <hr class="rule thick" />
+
+    <!-- ===================== CONCEPT ===================== -->
+    <main class="sections">
+
+      <p class="lede">
+        <em>LiftMaster 1500</em> (LM15) is a compact, portable personal lift
+        designed for tradespeople renovating older buildings - light enough
+        to carry up five flights of stairs, and small enough to collapse
+        through a doorway. Developed with A. UssingkÃ¦r as a DTU
+        course project (41612, Product Design &amp; Documentation), December
+        2024.
+      </p>
+
+      <hr class="rule" />
+
+      <section class="section" id="description">
+        <div class="marker"></div>
+        <div>
+          <h2>Description</h2>
+          <p>
+            Renovation work in older housing often happens in tight
+            stairwells and small rooms a full-size personnel lift can't
+            reach - and tightening restrictions on commercial vehicles in
+            city centres mean contractors increasingly need equipment that
+            can travel by cargo bike rather than van. LM15 is a response to
+            that brief: a personal lift that raises a worker from 300mm to
+            1500mm in 15 seconds, rated for 300kg (360kg safety limit), and
+            breaks down into 7 parts - none heavier than 25kg â€” that
+            reassemble without tools.
+          </p>
+          <p>
+            The platform is pulled up on wires by an electric motor and
+            winch mounted underneath it, running through ten pulleys for
+            even, stable lift at all four corners. Each corner post is
+            actually two: a telescoping inner and outer frame, connected to
+            each other and to the platform by that same wire-and-pulley
+            system, which keeps the collapsed footprint small. Nylon discs
+            between the frames - screwed to bent steel plates rather than
+            moulded in - cut friction and vibration where the platform rides
+            up the inner frame, and can be swapped on their own without
+            replacing the whole frame. The structure is built from standard
+            40Ã—40mm, 2.6mm steel box tube, chosen and load-calculated (against
+            the MMT handbook) for torsional stiffness at minimal weight; the
+            safety railing secures in seconds via spring-pin pipe clamps.
+          </p>
+          <p>
+            Getting there took a fairly systematic process: desk research
+            into existing lift types (scissor, boom, column), a
+            morphological analysis across parameters like lift mechanism,
+            power, feet, joints, and height control, then several rounds of
+            principle and quantitative structure comparisons before settling
+            on the telescoping double-frame column shown below. My focus on
+            the project was the structural variation work and the
+            worksheets that fed those concept decisions, alongside A.
+            UssingkÃ¦r, who led the technical drawings and load
+            calculations.
+          </p>
+          <div class="image-features">
+            <div class="image-feature">
+              <img src="first.png" alt="Morphological analysis matrix for the lift, with chosen solutions marked in orange" />
+              <p class="caption">
+                The morphological analysis: every parameter that could
+                define the lift - mechanism, power, feet, joints, height
+                control, safety, overload protection, gearing - laid out
+                with the chosen answer marked in orange for each row.
+              </p>
+            </div>
+            <div class="image-feature">
+              <img src="second.png" alt="Four sketched candidate structures for the lift mechanism" />
+              <p class="caption">
+                Four candidate mechanisms considered early on: a
+                single-column diagonal-wire lift, two variations pulling a
+                platform straight up a column, and (bottom right) the
+                telescoping inner/outer frame that became LM15's column.
+              </p>
+            </div>
+            <div class="image-feature">
+              <img src="third.png" alt="Three refined quantitative structure variations for the column and platform" />
+              <p class="caption">
+                Three refined variations on the column-and-platform
+                relationship - cross-braced, telescoping double-frame, and
+                wide-panel stabilization - compared before settling on the
+                telescoping frame.
+              </p>
+            </div>
+            <div class="image-feature">
+              <img src="fourth.png" alt="Six-step assembly drawing for the LiftMaster 1500" />
+              <p class="caption">
+                The full assembly sequence, tool-free: inner and outer
+                frames together, into the base frame, platform in between,
+                then the safety railing clips on and secures with pins.
+              </p>
+            </div>
+            <div class="image-feature">
+              <img src="fifth.png" alt="Close-up render of the spring-pin pipe clamp joint" />
+              <p class="caption">
+                The safety railing secures to the platform with spring pins
+                through a pipe-clamp tee - the same fastening used
+                throughout LM15 so nothing needs tools to assemble or
+                replace. The entire lift was modelled in Fusion 360, where
+                we also built animations of moving parts like this one to
+                check and illustrate how each mechanism actually operates
+                before it was built.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer>
+    <div class="wrap foot-grid">
+      <span class="meta">Adam Banck &copy; 2026</span>
+    </div>
+  </footer>
+
+  <script src="../../../assets/js/side-nav-dropdown.js"></script>
+</body>
+</html>

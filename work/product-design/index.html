@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      function setVH() {
+        document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+      }
+      var lastWidth = window.innerWidth;
+      setVH();
+      window.addEventListener('resize', function () {
+        if (window.innerWidth !== lastWidth) {
+          lastWidth = window.innerWidth;
+          setVH();
+        }
+      });
+    })();
+  </script>
+  <title>Product Design</title>
+  <link rel="icon" type="image/png" href="../../assets/favicon.png" />
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="../../assets/site.css?v=5" />
+  <link rel="stylesheet" href="../../assets/fonts.css" />
+  <link rel="stylesheet" href="../../dist/islands/islands.css" />
+  <style>
+    .page-head { padding: clamp(36px, calc(var(--vh, 1vh) * 7), 80px) 0 clamp(20px, calc(var(--vh, 1vh) * 4), 44px); }
+    .page-head .kicker {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .page-head h1 {
+      font-family: "Marcellus", Georgia, "Times New Roman", serif;
+      font-size: clamp(2.4rem, 6.5vw, 4.4rem);
+      font-weight: 100;
+      letter-spacing: -0.01em;
+      margin: 0.3em 0 0;
+    }
+
+    .work-tiles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(20px, 3vw, 40px);
+      max-width: 960px;
+      margin: 0 auto;
+      padding: clamp(20px, calc(var(--vh, 1vh) * 3), 32px) 0 clamp(40px, calc(var(--vh, 1vh) * 6), 70px);
+    }
+    .work-tile {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      display: block;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--ink);
+      opacity: 0.9;
+      transition: opacity 0.25s ease, border-color 0.25s ease,
+                  transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .work-tile img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    @media (hover: hover) {
+      .work-tile:hover {
+        opacity: 1;
+        border-color: var(--accent);
+        transform: translateY(-3px);
+      }
+    }
+
+    .mobile-work-carousel {
+      display: none;
+      width: 100%;
+      max-width: 560px;
+      /* Negative top margin compensates for the carousel's own internal
+         headroom above its topmost peeking card, pulling the visible
+         stack up against the rule above it. */
+      margin: -56px auto clamp(40px, calc(var(--vh, 1vh) * 6), 70px);
+    }
+    @media (max-width: 640px) {
+      .work-tiles { display: none; }
+      .mobile-work-carousel { display: block; }
+      /* Lock the viewport on phones so there's no page scroll to fight
+         with the carousel's horizontal swipe (same fix as the home page
+         and photography page carousels). */
+      html, body {
+        height: calc(var(--vh, 1vh) * 100);
+        overflow: hidden;
+      }
+      footer { display: none; }
+    }
+
+    .empty-note {
+      padding: clamp(34px, calc(var(--vh, 1vh) * 6), 60px) 0 clamp(60px, calc(var(--vh, 1vh) * 10), 100px);
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <a href="../../index.html" class="home-btn" aria-label="Home">
+    <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+      <path d="M3,11 L12,4 L21,11" />
+      <path d="M5,10 L5,20 L19,20 L19,10" />
+      <path d="M10,20 L10,14 L14,14 L14,20" />
+    </svg>
+  </a>
+  <div class="wrap">
+    <div class="page-head">
+      <h1 class="sr-only">Product Design</h1>
+      <div class="side-nav-col has-dropdown">
+        <p class="home-kicker serif">Selected Work</p>
+        <button type="button" class="side-nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="side-nav-menu">
+          Product Design
+          <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M5,9 L12,16 L19,9" /></svg>
+        </button>
+        <nav class="side-nav" id="side-nav-menu" aria-label="Categories">
+          <a href="index.html" class="current" aria-current="page">Product Design</a>
+          <a href="../cad-models/index.html">CAD Models</a>
+          <a href="../projects/index.html">Projects</a>
+          <a href="../photography/index.html">Photography</a>
+        </nav>
+      </div>
+    </div>
+
+    <hr class="rule" />
+
+    <nav class="work-tiles" aria-label="Product design work">
+      <a href="the-dome/index.html" class="work-tile" aria-label="The Dome">
+        <img src="the-dome/dome_ab.png" alt="" />
+      </a>
+      <a href="the-diamond/index.html" class="work-tile" aria-label="The Diamond">
+        <img src="the-diamond/lamp_ab.png" alt="" />
+      </a>
+      <a href="trophy/index.html" class="work-tile" aria-label="Trophy">
+        <img src="trophy/trophy_ab.png" alt="" />
+      </a>
+    </nav>
+  </div>
+
+  <!-- Outside .wrap so the stage bleeds to the true screen edges on mobile
+       (same pattern as the photography carousel's .photo-carousel-wrap) â€”
+       nesting it inside .wrap's side padding clipped the neighbour cards
+       early. -->
+  <div id="product-design-carousel-root" class="mobile-work-carousel" aria-label="Product design work"></div>
+
+  <footer>
+    <div class="wrap foot-grid">
+      <span class="meta">Adam Banck &copy; 2026</span>
+    </div>
+  </footer>
+  <script src="../../assets/js/side-nav-dropdown.js"></script>
+  <script type="module" src="../../dist/islands/product-design-carousel.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* shadcn-style components reference colors as `hsl(var(--primary))`, so this
+   mirrors the site's existing --accent token (assets/site.css) in that format.
+   Scoped to :root since this stylesheet only ships alongside island bundles. */
+:root {
+  --primary: 206 64% 74%; /* Sky Blue, same as --accent in assets/site.css */
+}

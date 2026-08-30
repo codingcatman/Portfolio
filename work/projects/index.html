@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      function setVH() {
+        document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+      }
+      var lastWidth = window.innerWidth;
+      setVH();
+      window.addEventListener('resize', function () {
+        if (window.innerWidth !== lastWidth) {
+          lastWidth = window.innerWidth;
+          setVH();
+        }
+      });
+    })();
+  </script>
+  <title>Projects</title>
+  <link rel="icon" type="image/png" href="../../assets/favicon.png" />
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="../../assets/site.css?v=5" />
+  <link rel="stylesheet" href="../../assets/fonts.css" />
+  <style>
+    .page-head { padding: clamp(36px, calc(var(--vh, 1vh) * 7), 80px) 0 clamp(20px, calc(var(--vh, 1vh) * 4), 44px); }
+    .page-head .kicker {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .page-head h1 {
+      font-family: "Marcellus", Georgia, "Times New Roman", serif;
+      font-size: clamp(2.4rem, 6.5vw, 4.4rem);
+      font-weight: 100;
+      letter-spacing: -0.01em;
+      margin: 0.3em 0 0;
+    }
+
+    .work-tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 170px));
+      gap: clamp(14px, 2vw, 24px);
+      padding: clamp(20px, calc(var(--vh, 1vh) * 3), 32px) 0 clamp(40px, calc(var(--vh, 1vh) * 6), 70px);
+    }
+    @media (min-width: 641px) {
+      .work-tiles {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 170px));
+        justify-content: center;
+      }
+    }
+    .work-tile {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(10px, calc(var(--vh, 1vh) * 2), 16px);
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--ink);
+      opacity: 0.9;
+      transition: opacity 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+                  transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    @media (hover: hover) {
+      .work-tile:hover {
+        opacity: 1;
+        color: var(--accent);
+        border-color: var(--accent);
+        transform: translateY(-3px);
+      }
+    }
+    .work-tile svg {
+      width: clamp(34px, 7vw, 52px);
+      height: clamp(34px, 7vw, 52px);
+      stroke: currentColor;
+      fill: none;
+    }
+    .work-tile .tile-label {
+      font-family: "Marcellus", Georgia, "Times New Roman", serif;
+      font-size: clamp(0.75rem, 1.6vw, 0.9rem);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .empty-note {
+      padding: clamp(34px, calc(var(--vh, 1vh) * 6), 60px) 0 clamp(60px, calc(var(--vh, 1vh) * 10), 100px);
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <a href="../../index.html" class="home-btn" aria-label="Home">
+    <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+      <path d="M3,11 L12,4 L21,11" />
+      <path d="M5,10 L5,20 L19,20 L19,10" />
+      <path d="M10,20 L10,14 L14,14 L14,20" />
+    </svg>
+  </a>
+  <div class="wrap">
+    <div class="page-head">
+      <h1 class="sr-only">Projects</h1>
+      <div class="side-nav-col has-dropdown">
+        <p class="home-kicker serif">Selected Work</p>
+        <button type="button" class="side-nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="side-nav-menu">
+          Projects
+          <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M5,9 L12,16 L19,9" /></svg>
+        </button>
+        <nav class="side-nav" id="side-nav-menu" aria-label="Categories">
+          <a href="../product-design/index.html">Product Design</a>
+          <a href="../cad-models/index.html">CAD Models</a>
+          <a href="index.html" class="current" aria-current="page">Projects</a>
+          <a href="../photography/index.html">Photography</a>
+        </nav>
+      </div>
+    </div>
+
+    <hr class="rule" />
+
+    <nav class="work-tiles" aria-label="Projects">
+      <a href="magic-mirror/index.html" class="work-tile">
+        <svg viewBox="0 0 64 64" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+          <ellipse cx="32" cy="24" rx="16" ry="20" />
+          <path d="M32,44 L32,58" />
+          <path d="M26,58 L38,58" />
+        </svg>
+        <span class="tile-label">Magic Mirror</span>
+      </a>
+      <a href="roskilde-lamp/index.html" class="work-tile">
+        <svg viewBox="0 0 64 64" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+          <path d="M14,50 L32,14 L50,50" />
+          <path d="M32,14 L24,50 M32,14 L40,50" />
+          <path d="M10,50 L54,50" />
+        </svg>
+        <span class="tile-label">HappyLight</span>
+      </a>
+      <a href="lift/index.html" class="work-tile">
+        <svg viewBox="0 0 64 64" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+          <rect x="20" y="14" width="24" height="38" rx="2" />
+          <path d="M32,14 L32,52" />
+          <path d="M25,9 L32,2 L39,9" />
+          <path d="M25,57 L32,64 L39,57" />
+        </svg>
+        <span class="tile-label">LiftMaster 1500</span>
+      </a>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="wrap foot-grid">
+      <span class="meta">Adam Banck &copy; 2026</span>
+    </div>
+  </footer>
+  <script src="../../assets/js/side-nav-dropdown.js"></script>
+</body>
+</html>

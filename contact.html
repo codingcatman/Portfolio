@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      function setVH() {
+        document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+      }
+      var lastWidth = window.innerWidth;
+      setVH();
+      window.addEventListener('resize', function () {
+        if (window.innerWidth !== lastWidth) {
+          lastWidth = window.innerWidth;
+          setVH();
+        }
+      });
+    })();
+  </script>
+  <title>Contact</title>
+  <meta name="description" content="Get in touch with Adam Banck." />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="assets/site.css?v=5" />
+  <link rel="stylesheet" href="assets/fonts.css" />
+  <style>
+    .page-head { padding: clamp(36px, calc(var(--vh, 1vh) * 7), 80px) 0 clamp(20px, calc(var(--vh, 1vh) * 4), 44px); }
+    .page-head h1 {
+      font-family: "Marcellus", Georgia, "Times New Roman", serif;
+      font-size: clamp(2.4rem, 6.5vw, 4.4rem);
+      font-weight: 100;
+      letter-spacing: -0.01em;
+      margin: 0.3em 0 0;
+    }
+
+    .contact-body {
+      max-width: 34rem;
+      padding: 0 0 clamp(60px, calc(var(--vh, 1vh) * 10), 100px);
+    }
+    .contact-body p {
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin: 0 0 1.2em;
+    }
+
+    .linkedin-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 clamp(28px, calc(var(--vh, 1vh) * 4), 44px);
+      text-decoration: none;
+      color: var(--ink);
+      opacity: 0.9;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+    @media (hover: hover) {
+      .linkedin-link:hover { opacity: 1; color: var(--accent); }
+    }
+    .linkedin-link img {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: block;
+    }
+    .linkedin-link .label {
+      font-family: "Marcellus", Georgia, "Times New Roman", serif;
+      font-size: 1.05rem;
+      letter-spacing: 0.06em;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="home-btn" aria-label="Home">
+    <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+      <path d="M3,11 L12,4 L21,11" />
+      <path d="M5,10 L5,20 L19,20 L19,10" />
+      <path d="M10,20 L10,14 L14,14 L14,20" />
+    </svg>
+  </a>
+
+  <div class="wrap">
+    <div class="page-head">
+      <h1>Contact</h1>
+    </div>
+
+    <div class="contact-body">
+      <a class="linkedin-link" href="https://www.linkedin.com/in/adambanck" target="_blank" rel="noopener noreferrer">
+        <img src="assets/linkedin.png" alt="" />
+        <span class="label">/adambanck</span>
+      </a>
+
+      <p>
+        adbanck@gmail.com
+      </p>
+      <p>
+        +45 22854353
+      </p>
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap foot-grid">
+      <span class="meta">Adam Banck &copy; 2026</span>
+    </div>
+  </footer>
+</body>
+</html>

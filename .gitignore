@@ -1,0 +1,9 @@
+node_modules/
+
+# Local-machine Claude Code settings (personal, not shared)
+.claude/settings.local.json
+
+# Raw/source assets not used by the live site (kept locally, too large for git)
+work/photography/**/_originals/
+work/projects/lift/Full Assembly v2.obj
+work/projects/roskilde-lamp/2025_41639_OrangeGlow_FinalReport_and_Appendix.pdf

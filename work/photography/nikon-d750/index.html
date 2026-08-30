@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      function setVH() {
+        document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+      }
+      var lastWidth = window.innerWidth;
+      setVH();
+      window.addEventListener('resize', function () {
+        if (window.innerWidth !== lastWidth) {
+          lastWidth = window.innerWidth;
+          setVH();
+        }
+      });
+    })();
+  </script>
+  <title>Nikon D750</title>
+  <link rel="icon" type="image/png" href="../../../assets/favicon.png" />
+  <link rel="apple-touch-icon" href="../../../assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="../../../assets/site.css?v=5" />
+  <link rel="stylesheet" href="../../../assets/fonts.css" />
+  <style>
+    /* Dark, display-mode background for viewing the photos, like a
+       camera's playback screen. Fades in from the site's normal paper
+       colour on arrival rather than cutting straight to dark. */
+    :root { --paper: #2e2a24; }
+    body {
+      animation: dim-in 0.9s ease forwards;
+    }
+    @keyframes dim-in {
+      from { background-color: #625B51; }
+      to { background-color: #2e2a24; }
+    }
+
+    .page-head { padding: 0; }
+    .page-head .kicker {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .page-head h1 {
+      font-family: "Marcellus", Georgia, "Times New Roman", serif;
+      font-size: clamp(2.4rem, 6.5vw, 4.4rem);
+      font-weight: 100;
+      letter-spacing: -0.01em;
+      margin: 0.3em 0 0;
+    }
+    .photo-carousel-wrap {
+      padding: 0px 0 clamp(24px, calc(var(--vh, 1vh) * 4), 48px);
+    }
+    /* Extra inset on top of .wrap's own padding, so the divider reads
+       narrower than the page content instead of running edge to edge. */
+    .rule-inset {
+      margin-inline: clamp(20px, 5vw, 56px);
+    }
+    .topbar {
+      justify-content: flex-end;
+    }
+    .carousel-back {
+      padding: clamp(40px, calc(var(--vh, 1vh) * 5), 56px) 0 0;
+      text-align: center;
+    }
+    .carousel-back a {
+      display: inline-flex;
+      align-items: center;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      color: #fff;
+      text-decoration: none;
+      opacity: 0.85;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+    @media (hover: hover) {
+      .carousel-back a:hover { opacity: 1; color: var(--accent); }
+    }
+
+    /* Lock the viewport on phones â€” this page is meant to feel like a
+       camera's fullscreen display mode, not a scrolling page. Trim the
+       looser paddings and drop the footer so everything fits in one
+       screen instead of getting clipped by the hidden overflow. */
+    @media (max-width: 640px) {
+      html, body {
+        height: calc(var(--vh, 1vh) * 100);
+        overflow: hidden;
+      }
+      .carousel-back { padding-top: 60px; }
+      .photo-carousel-wrap { padding-bottom: 12px; }
+      footer { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <a href="../../../index.html" class="home-btn" aria-label="Home">
+    <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+      <path d="M3,11 L12,4 L21,11" />
+      <path d="M5,10 L5,20 L19,20 L19,10" />
+      <path d="M10,20 L10,14 L14,14 L14,20" />
+    </svg>
+  </a>
+  <div class="">
+    <div class="page-head wrap">
+      <h1 class="sr-only">Nikon D750</h1>
+    </div>
+
+    <div class="carousel-back wrap">
+      <a href="../index.html" aria-label="Back to Photography">&times;</a>
+    </div>
+
+    <!-- Add more photos by dropping resized originals into images/ (see
+         scripts/resize-photos.ps1) and adding an entry to the `images` array
+         in src/islands/photography-carousel.tsx, numbering onward from 09.jpg. -->
+    <div class="photo-carousel-wrap">
+      <div id="photo-carousel-root"></div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap foot-grid">
+      <span class="meta">Adam Banck &copy; 2026</span>
+    </div>
+  </footer>
+
+  <script type="module" src="../../../dist/islands/photography-carousel.js?v=3"></script>
+</body>
+</html>

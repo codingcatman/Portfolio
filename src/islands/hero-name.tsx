@@ -15,9 +15,7 @@ if (el) {
       />
       <AnimatedText
         text="BANCK"
-        solidColor="#4A4846"
-        outline
-        outlineWidth="0.5px"
+        solidColor="#2B2825"
         animate={false}
         className="py-0"
         textClassName="text-[clamp(3.6rem,15.84vw,10.8rem)] sm:text-[clamp(3.3rem,14.52vw,9.9rem)] md:text-[clamp(3.3rem,14.52vw,9.9rem)] lg:text-[clamp(3.3rem,14.52vw,9.9rem)] xl:text-[clamp(3.3rem,14.52vw,9.9rem)] font-['Special_Gothic_Condensed_One'] tracking-tight pr-[0.15em]"

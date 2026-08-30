@@ -36,6 +36,11 @@
       to { background-color: #2e2a24; }
     }
 
+    /* Mirrors site.css's `body > .wrap { flex: 1 0 auto }` sticky-footer
+       trick — this page's direct child isn't .wrap, so it needs its own
+       rule to grow and push the footer to the floor on desktop. */
+    .page-shell { flex: 1 0 auto; }
+
     .page-head { padding: 0; }
     .page-head .kicker {
       font-size: 0.72rem;
@@ -101,7 +106,7 @@
       <path d="M10,20 L10,14 L14,14 L14,20" />
     </svg>
   </a>
-  <div class="">
+  <div class="page-shell">
     <div class="page-head wrap">
       <h1 class="sr-only">Nikon D750</h1>
     </div>

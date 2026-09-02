@@ -40,13 +40,28 @@
       margin: 0.3em 0 0;
     }
 
+    /* .wrap becomes a flex column so the space it grows into (via the
+       shared body>.wrap flex:1 0 auto rule) can be handed to .work-tiles
+       below, which centers the card row within it. */
+    .wrap { display: flex; flex-direction: column; }
+    .rule { flex-shrink: 0; }
+    footer {
+      /* Owned by .work-tiles's flex-grow instead, so the card row centers
+         symmetrically between the header rule and the footer rule rather
+         than being pushed up by a fixed gap below it. */
+      margin-top: 0;
+    }
+
     .work-tiles {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: clamp(20px, 3vw, 40px);
+      width: 100%;
       max-width: 960px;
       margin: 0 auto;
-      padding: clamp(20px, calc(var(--vh, 1vh) * 3), 32px) 0 clamp(40px, calc(var(--vh, 1vh) * 6), 70px);
+      flex: 1;
+      align-content: center;
+      padding: clamp(20px, calc(var(--vh, 1vh) * 3), 32px) 0;
     }
     .work-tile {
       position: relative;
